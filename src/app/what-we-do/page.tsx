@@ -1,5 +1,39 @@
 // src/app/what-we-do/page.tsx
 import type { Metadata } from 'next'
+import StructuredData from '@/components/StructuredData'
+
+<StructuredData
+  org={{
+    name: 'Impisi Resources',
+    url: 'https://impisiresources.com',
+    logo: 'https://impisiresources.com/Impisi-Resources-Logo.svg',
+    telephone: '+27 11 082 9828',
+    sameAs: [
+      // add if you have them:
+      // 'https://www.linkedin.com/company/your-company',
+      // 'https://www.facebook.com/your-page',
+    ],
+  }}
+  local={{
+    name: 'Impisi Resources',
+    telephone: '+27 11 082 9828',
+    address: {
+      streetAddress: 'Atrium on 5th, 5th St',
+      addressLocality: 'Sandhurst',
+      addressRegion: 'Gauteng',
+      postalCode: '2196',
+      addressCountry: 'ZA',
+    },
+    geo: { latitude: -26.107665, longitude: 28.052501 },
+  }}
+  // optional site search (only add if you have a search page/endpoint)
+  // siteSearch={{
+  //   url: 'https://impisiresources.com',
+  //   target: 'https://impisiresources.com/?q={search_term_string}',
+  //   queryInput: 'required name=search_term_string',
+  // }}
+/>
+
 
 export const metadata: Metadata = {
   title: 'What We Do | Impisi Resources',

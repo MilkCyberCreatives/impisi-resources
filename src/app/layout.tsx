@@ -3,12 +3,20 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import ScrollToTop from '@/components/ScrollToTop'
+
+const SITE_URL = 'https://impisiresources.com'
+const DESC =
+  'Impisi Resources specialises in the processing and trading of Chrome Ore Concentrate — prioritising quality, efficiency and reliable delivery.'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://impisiresources.com'),
-  title: { default: 'Impisi Resources', template: '%s | Impisi Resources' },
-  description:
-    'Impisi Resources operates within the mineral beneficiation sector, specializing in the processing and trading of Chrome Ore Concentrate.',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'Impisi Resources',
+    template: '%s | Impisi Resources',
+  },
+  description: DESC,
+  alternates: { canonical: '/' },
   icons: {
     icon: '/Impisi-Resources-Logo.svg',
     shortcut: '/Impisi-Resources-Logo.svg',
@@ -16,60 +24,30 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    url: 'https://impisiresources.com',
-    siteName: 'Impisi Resources',
+    url: SITE_URL,
     title: 'Impisi Resources',
-    description: 'Specialists in the processing and trading of Chrome Ore Concentrate.',
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Impisi Resources' }],
+    description: DESC,
+    images: ['/og-image.jpg'],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Impisi Resources',
-    description: 'Specialists in the processing and trading of Chrome Ore Concentrate.',
+    description: DESC,
     images: ['/og-image.jpg'],
   },
-  alternates: { canonical: 'https://impisiresources.com' },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const orgJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'Impisi Resources',
-    url: 'https://impisiresources.com',
-    logo: 'https://impisiresources.com/Impisi-Resources-Logo.svg',
-    email: 'info@impisiresources.com',
-    telephone: '+27-11-082-9828',
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: 'Atrium on 5th, 5th St, Sandhurst',
-      addressLocality: 'Sandton',
-      addressRegion: 'Gauteng',
-      addressCountry: 'ZA',
-    },
-    sameAs: [] as string[],
-  }
-
-  const siteJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'Impisi Resources',
-    url: 'https://impisiresources.com',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: 'https://impisiresources.com/search?q={query}',
-      'query-input': 'required name=query',
-    },
-  }
-
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body className="min-h-screen bg-white text-slate-900 antialiased">
-        <Header />
-        <main>{children}</main>
-        <Footer />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }} />
+        <div className="flex min-h-screen flex-col">
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </div>
+        {/* Always-on-top floating button */}
+        <ScrollToTop />
       </body>
     </html>
   )

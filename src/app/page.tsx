@@ -6,6 +6,7 @@ import OurWorkPreview from '@/components/home/OurWorkPreview'
 import OperationsBand from '@/components/home/OperationsBand'
 // import ContactCTA from '@/components/home/ContactCTA'
 
+
 export default function HomePage() {
   return (
     <main className="bg-white">
