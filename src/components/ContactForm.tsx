@@ -3,6 +3,13 @@
 
 import { useState } from 'react'
 
+type MailResponse = {
+  ok?: boolean
+  status?: string
+  error?: string
+  message?: string
+}
+
 export default function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState<string>('')
@@ -22,8 +29,14 @@ export default function ContactForm() {
         headers: { Accept: 'application/json' },
       })
 
-      const data = await res.json().catch(() => ({} as any))
-      if (res.ok && (data?.ok || data?.status === 'ok')) {
+      let data: MailResponse | null = null
+      try {
+        data = (await res.json()) as MailResponse
+      } catch {
+        // no JSON body
+      }
+
+      if (res.ok && ((data?.ok ?? false) || data?.status === 'ok')) {
         setStatus('success')
         setMessage('Thanks — your message has been sent. We’ll get back to you shortly.')
         form.reset()
@@ -31,13 +44,13 @@ export default function ContactForm() {
         setStatus('error')
         setMessage(
           data?.error ||
-            'Sorry, something went wrong sending your message. Please try again or use the contact details.'
+            `Sorry, something went wrong sending your message. Please try again (code ${res.status}).`
         )
       }
-    } catch (err) {
+    } catch {
       setStatus('error')
       setMessage(
-        'Could not reach the mail server. If you are testing locally, deploy to a PHP-enabled host to send mail.'
+        'Could not reach the mail server. If you are testing locally or on a host without PHP, deploy the mail endpoint to a PHP server or use a Next.js API route.'
       )
     }
   }
@@ -122,7 +135,6 @@ export default function ContactForm() {
         />
       </div>
 
-      {/* Submit */}
       <div className="mt-2 flex items-center justify-between gap-4">
         <p className="text-xs text-slate-500">
           By submitting, you agree we may contact you regarding your enquiry.
@@ -136,7 +148,6 @@ export default function ContactForm() {
         </button>
       </div>
 
-      {/* Status message */}
       {status !== 'idle' && (
         <div
           className={`mt-3 rounded-md border px-3 py-2 text-sm ${
